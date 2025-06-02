@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Comments from './SiteComponents/Forms/Comments';
@@ -31,26 +30,25 @@ export default function App() {
 
 
   return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1></h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-         
-        </p>
-      </div>
-      <p >
-     
-      </p>
-    </>
-  )
+return (
+  <Router>
+    <NavBar />
+    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/hobbies" element={<Hobbies />} />
+      <Route path="/nutrition" element={<Nutrition />} />
+      <Route path="/ot" element={<OTthings />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/comments" element={<Comments />} />
+      <Route path="/quote" element={<Quote />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  </Router>
+  );
 }
 
 
