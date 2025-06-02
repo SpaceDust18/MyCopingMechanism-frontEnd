@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import { BrowserRouter as Router, Routes, Router, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Comments from './SiteComponents/Forms/Comments';
 import Contact from './SiteComponents/Forms/Contact';
 import SearchBar from './SiteComponents/Forms/SearchBar';
