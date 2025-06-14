@@ -1,0 +1,16 @@
+.not-found-container {
+    text-align: center;
+    padding: 4rem;
+  }
+  
+  .not-found-container h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .not-found-container .home-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #3366ff;
+    text-decoration: underline;
+  }
