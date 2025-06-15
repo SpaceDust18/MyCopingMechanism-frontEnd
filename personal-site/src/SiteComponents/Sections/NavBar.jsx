@@ -1,32 +1,38 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./NavBar.css";
 
 export default function NavBar({ authUser, setAuthUser, setToken }) {
+    const [isOpen, setIsOpen] = useState(false);
+
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         setAuthUser(null);
         setToken(null);
+        setIsOpen(false);
     };
+
+    const toggleMenu = () => setIsOpen(prev => !prev)
 
     return (
         <nav className="navbar">
-            <Link to="/register">Register</Link>
-            <Link to="/contact">Contact</Link>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-            {authUser && <Link to="/blog">Blog</Link>}
-            {authUser && <Link to="/comments">Comments</Link>}
-            {/* Add other links as needed */}
+            <div className="logo">MyCopingMechanism</div>
 
-            <div className="auth-controls">
-                {authUser ? (
-                    <button onClick={handleLogout}>Logout</button>
-                ) : (
-                    <Link to="/login">Login</Link>
-                )}
+            <div className={`nav-links ${isOpen ? 'open' : ''}`}>
+                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
+                <Link to="/blog">Blog</Link>
+                <Link to="/contact">Contact</Link>
             </div>
-        </nav>
-    )
+
+            <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+                <div className="line" />
+                <div className="line" />
+                <div className="line" />
+            </div>
+        </nav >
+    );
 }
 
 

@@ -19,7 +19,7 @@ import Home from './SiteComponents/Home';
 import './App.css'
 import './SiteComponents/Sections/NotFound.css';
 
-{/*Prevents irrational scrolling behavior*/ }
+//Prevents irrational scrolling behavior
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function App() {
   });
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <NavBar authUser={authUser} setAuthUser={setAuthUser} setToken={setToken} /> 
       {/* Navbar outside the routes so it appears globally */}
@@ -65,8 +65,9 @@ export default function App() {
         <Route path="/comments" element={authUser ? <Comments /> : <Navigate to="/login" />} />
 
       </Routes>
-    </Router>
+   </>
   )
+  
 }
 
 

@@ -1,0 +1,67 @@
+/* General NavBar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: rgba(0, 0, 0, 0.4); /* semi-transparent background */
+    color: white;
+    backdrop-filter: blur(5px); /* adds a soft blur effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Logo Section */
+  .navbar-logo a {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  
+  /* Links Container */
+  .navbar-links {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Nav Links */
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    color: #87cefa; /* soft light blue on hover */
+  }
+  
+  /* Logout Button */
+  .logout-button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: 500;
+    margin-left: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    color: #f08080; /* soft red-pink hover */
+  }
+
+  @media (max-width: 768px) {
+    .navbar a {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+  }
