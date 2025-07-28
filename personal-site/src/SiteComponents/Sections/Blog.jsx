@@ -17,7 +17,7 @@ const posts = [
     author: "Claudia",
     date: "March 8, 2024",
     readTime: "3 min read",
-    image: "/public/time.jpg",
+    image: "/time.jpg",
     excerpt: "It seems the older we get, the faster time passes. As children, we live in the moment, but adulthood brings struggles that steal that joy...",
   },
   {
