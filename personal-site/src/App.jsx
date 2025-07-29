@@ -8,6 +8,8 @@ import Contact from './SiteComponents/Forms/Contact';
 import SearchBar from './SiteComponents/Forms/SearchBar';
 import About from './SiteComponents/Sections/About';
 import Blog from './SiteComponents/Sections/Blog';
+import Posts from './SiteComponents/Sections/Posts.jsx';
+import SinglePost from './SiteComponents/Sections/SinglePost.jsx';
 import Hobbies from './SiteComponents/Sections/Hobbies';
 import NavBar from './SiteComponents/Sections/NavBar';
 import NotFound from './SiteComponents/Sections/NotFound.jsx';
@@ -53,6 +55,8 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
         <Route path="/" element={<Home />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/posts/:id" element={<SinglePost />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={authUser ? <Blog /> : <Navigate to="/" />} />
@@ -66,8 +70,7 @@ export default function App() {
 
       </Routes>
    </>
-  )
-  
+  )  
 }
 
 
