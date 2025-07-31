@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { posts } from "./Posts.jsx";
+import { posts } from "../../data/postsData";
 import "./SinglePost.css";
 
 export default function SinglePost() {
@@ -15,7 +15,7 @@ export default function SinglePost() {
       </div>
     );
   }
-
+  
   return (
     <article className="single-post">
       <img src={post.image} alt={post.title} className="post-image" />

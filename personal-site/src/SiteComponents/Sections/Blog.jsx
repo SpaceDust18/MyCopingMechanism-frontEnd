@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { posts } from "./Posts.jsx";
+import { posts } from "../../data/postsData";
 import "./Blog.css";
 
 export default function Blog() {

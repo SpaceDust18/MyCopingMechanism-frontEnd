@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Register from './SiteComponents/Forms/Register.jsx'
 import Login from './SiteComponents/Forms/Login.jsx'
+import Profile from './SiteComponents/Sections/Profile.jsx';
 import Comments from './SiteComponents/Forms/Comments';
 import Contact from './SiteComponents/Forms/Contact';
 import SearchBar from './SiteComponents/Forms/SearchBar';
@@ -20,6 +21,7 @@ import Quote from './SiteComponents/Sections/Quote';
 import Home from './SiteComponents/Home';
 import './App.css'
 import './SiteComponents/Sections/NotFound.css';
+import Footer from './SiteComponents/Sections/Footer.jsx';
 
 //Prevents irrational scrolling behavior
 function ScrollToTop() {
@@ -53,6 +55,7 @@ export default function App() {
 
         <Route path="/login" element={<Login setAuthUser={setAuthUser} setToken={setToken} />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile authUser={authUser} />} />
         <Route path="/search" element={<SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
@@ -69,6 +72,7 @@ export default function App() {
         <Route path="/comments" element={authUser ? <Comments /> : <Navigate to="/login" />} />
 
       </Routes>
+      <Footer />
    </>
   )  
 }
