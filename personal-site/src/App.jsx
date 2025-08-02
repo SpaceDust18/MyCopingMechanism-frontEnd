@@ -59,7 +59,7 @@ export default function App() {
         <Route path="/search" element={<SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
-        <Route path="/posts/:id" element={<SinglePost />} />
+        <Route path="/posts/:id" element={<SinglePost authUser={authUser}/>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={authUser ? <Blog /> : <Navigate to="/" />} />
