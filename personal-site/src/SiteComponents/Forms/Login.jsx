@@ -1,27 +1,46 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./AuthForms.css";
+import { API_BASE_URL } from "../../api/config";
 
 export default function Login({ setAuthUser, setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock login for now
-    const mockUser = { email, name: "Claudia" };
-    localStorage.setItem("authToken", "dummyToken");
-    localStorage.setItem("user", JSON.stringify(mockUser));
-    setToken("dummyToken");
-    setAuthUser(mockUser);
-    navigate("/"); // Redirect to home after login
+    setError("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      setToken(data.token);
+      setAuthUser(data.user);
+
+      navigate("/"); // Redirect to home
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <section className="auth-form">
       <h2>Login</h2>
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>Email:</label>
         <input
@@ -32,21 +51,12 @@ export default function Login({ setAuthUser, setToken }) {
         />
 
         <label>Password:</label>
-        <div className="password-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? "Hide" : "Show"}
-          </button>
-        </div>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <button type="submit" className="submit-btn">Login</button>
         <p>Don't have an account? <Link to="/register">Register</Link></p>

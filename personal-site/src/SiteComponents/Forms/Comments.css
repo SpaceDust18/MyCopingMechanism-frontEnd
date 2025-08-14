@@ -1,85 +1,53 @@
 .comments-section {
     margin-top: 2rem;
-    padding: 1rem;
-    background: #f9f9f9; /* light background */
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
   }
   
-  .comments-section h3 {
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-    color: #333;
+  .comments-list {
+    list-style: none;
+    padding-left: 0;
   }
   
-  /* Comment Form */
+  .comments-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
   .comment-form {
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
   }
   
   .comment-form textarea {
-    resize: none;
-    min-height: 80px;
-    padding: 0.75rem;
+    resize: vertical;
+    padding: 0.5rem;
     font-size: 1rem;
-    border-radius: 6px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    margin-bottom: 0.5rem;
-    transition: border 0.3s ease;
-  }
-  
-  .comment-form textarea:focus {
-    border-color: #6c63ff; /* Match your theme color */
-    outline: none;
   }
   
   .comment-form button {
-    align-self: flex-end;
+    margin-top: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: #6c63ff; /* Theme color */
+    background-color: #4a90e2;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
-    transition: background 0.3s ease;
   }
   
-  .comment-form button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  .comment-form button:hover {
+    background-color: #357abd;
   }
   
-  .comment-form button:hover:not(:disabled) {
-    background-color: #5848d6; /* Darker shade for hover */
+  .error {
+    color: red;
+    font-size: 0.9rem;
   }
   
-  /* Comment List */
-  .comments-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
-  .comment-card {
-    background: white;
-    padding: 0.75rem;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-  
-  .comment-author {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-  
-  .comment-text {
-    margin-bottom: 0.25rem;
-  }
-  
-  .comment-date {
-    font-size: 0.85rem;
-    color: #888;
+  .login-to-comment {
+    margin-top: 1rem;
+    font-style: italic;
   }

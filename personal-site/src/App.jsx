@@ -33,14 +33,13 @@ function ScrollToTop() {
 }
 
 export default function App() {
-  const [token, setToken] = useState(() => localStorage.getItem("authToken"));
+  const [token, setToken] = useState(() => localStorage.getItem("authToken") || "");
   const [searchQuery, setSearchQuery] = useState("");
   const [authUser, setAuthUser] = useState(() => {
     try {
       const storedUser = localStorage.getItem("user");
       return storedUser ? JSON.parse(storedUser) : null;
-    } catch (error) {
-      console.error("Error parsing user data from localStorage:", error)
+    } catch {
       return null;
     }
   });

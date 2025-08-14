@@ -16,6 +16,7 @@ export default function Quote() {
 
   return (
     <section className="quote-section">
+      <h5>Quote of the week!</h5>
       <blockquote className="quote-text">“{selectedQuote}”</blockquote>
     </section>
   );

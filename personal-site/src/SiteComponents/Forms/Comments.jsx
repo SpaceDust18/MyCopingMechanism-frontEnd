@@ -1,61 +1,73 @@
 import React, { useState } from "react";
+import { API_BASE_URL } from "../../api/config";
 import "./Comments.css";
 
-export default function Comments({ postId, authUser }) {
-  const [comments, setComments] = useState([]);
+export default function Comments({ postId, authUser, token, comments, setComments }) {
   const [newComment, setNewComment] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!authUser) {
-      alert("You must be logged in to comment.");
-      return;
-    }
+    setError("");
+
     if (!newComment.trim()) return;
 
-    const commentObj = {
-      id: Date.now(), // temporary unique ID
-      postId,
-      author: authUser.name || "Anonymous",
-      text: newComment,
-      date: new Date().toLocaleString(),
-    };
+    try {
+      const res = await fetch(`${API_BASE_URL}/comments/post/${postId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          content: newComment,
+        }),
+      });
 
-    setComments([...comments, commentObj]);
-    setNewComment("");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to post comment");
+      }
+
+      const savedComment = await res.json();
+
+      // Optimistically update UI
+      setComments((prev) => [...prev, savedComment]);
+      setNewComment("");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <section className="comments-section">
       <h3>Comments</h3>
 
-      {/* Comment Form */}
-      <form className="comment-form" onSubmit={handleSubmit}>
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder={authUser ? "Write your comment..." : "Log in to comment"}
-          disabled={!authUser}
-        />
-        <button type="submit" disabled={!authUser}>
-          Add Comment
-        </button>
-      </form>
+      {comments?.length === 0 && <p>No comments yet. Be the first to comment!</p>}
 
-      {/* Comments List */}
-      <div className="comments-list">
-        {comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment.id} className="comment-card">
-              <p className="comment-author">{comment.author}</p>
-              <p className="comment-text">{comment.text}</p>
-              <span className="comment-date">{comment.date}</span>
-            </div>
-          ))
-        ) : (
-          <p>No comments yet. Be the first to comment!</p>
-        )}
-      </div>
+      <ul className="comments-list">
+        {comments.map((c) => (
+          <li key={c.id}>
+            <strong>{c.author || "Anonymous"}:</strong> {c.content}
+          </li>
+        ))}
+      </ul>
+
+      {authUser ? (
+        <form onSubmit={handleSubmit} className="comment-form">
+          {error && <p className="error">{error}</p>}
+          <textarea
+            rows="3"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write your comment..."
+            required
+          ></textarea>
+          <button type="submit">Post Comment</button>
+        </form>
+      ) : (
+        <p className="login-to-comment">Log in to post a comment.</p>
+      )}
     </section>
   );
 }
