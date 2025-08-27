@@ -1,19 +1,31 @@
 .hobbies-section {
-    padding: 2rem;
-    text-align: center;
-    background: #fff;
-    margin: 2rem 0;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: black;
-  }
-  
-  .hobbies-section h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .hobbies-section p {
-    font-size: 1.2rem;
-    color: #555;
-  }
+  padding: 2rem;
+  text-align: center;
+  background: #fff;
+  margin: 2rem 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+/* Make Hobbies cards solid, no blur */
+.hobbies-section .cms-card {
+  backdrop-filter: none !important;
+  background: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+/* Ensure text colors are dark on the solid card */
+.hobbies-section .cms-card h3 { color: #111 !important; }
+.hobbies-section .cms-card p  { color: #222 !important; }
+
+.hobbies-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.hobbies-section p {
+  font-size: 1.2rem;
+  color: #555;
+}

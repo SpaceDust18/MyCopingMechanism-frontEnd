@@ -1,0 +1,97 @@
+.cms-section {
+    padding: 2rem 1rem;
+    color: #0b0b0c;
+  }
+  
+  .cms-section h1 {
+    font-family: "Orbitron", sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .cms-actions {
+    margin: 1rem 0 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .cms-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .cms-card {
+    border-radius: 16px;
+    padding: 1.25rem;
+    backdrop-filter: blur(12px);
+    background: rgba(249, 242, 242, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .cms-card img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cms-card h3 {
+    font-family: "Orbitron", sans-serif;
+    margin: 0;
+    font-size: 1.25rem;
+    color: #fff;
+  }
+  
+  .cms-card p {
+    margin: 0;
+    line-height: 1.5;
+    color: #090909;
+    white-space: pre-wrap; /* preserve line breaks */
+  }
+  
+  .cms-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+  
+  /* Buttons */
+  .mcm-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    padding: 0.5rem 0.85rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+  
+  .mcm-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .mcm-btn.primary {
+    background: linear-gradient(135deg, rgba(168,85,247,0.9), rgba(99,102,241,0.9));
+    border: none;
+  }
+  
+  .mcm-btn.ghost {
+    background: transparent;
+  }
+
+ /* Solid variant for any section using className="solid-cards" */
+.solid-cards .cms-card {
+    backdrop-filter: none;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+  .solid-cards .cms-card h3 { color: #111; }
+  .solid-cards .cms-card p  { color: #222; }

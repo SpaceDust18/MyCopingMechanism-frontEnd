@@ -1,12 +1,17 @@
+// src/SiteComponents/Sections/Hobbies.jsx
 import React from "react";
-import "./Hobbies.css";
+import SectionEditor from "./SectionEditor";
 
-export default function Hobbies() {
+export default function Hobbies({ authUser, token }) {
   return (
-    <section className="hobbies-section">
-      <h2>Things I Love</h2>
-      <p>Exercising, drawing, watching crime shows, and creating meaningful digital experiences.</p>
-      {/* Later: turn this into a gallery or list of hobbies */}
-    </section>
+    <>
+    <h1>Hobbies & more...</h1>
+    <SectionEditor
+      slug="hobbies"
+      authUser={authUser}
+      token={token}
+      className="solid-cards"
+    />
+    </>
   );
 }

@@ -1,20 +1,12 @@
+// src/SiteComponents/Sections/OTThings.jsx
 import React from "react";
-import "./OTthings.css";
+import SectionEditor from "./SectionEditor";
 
-export default function OTthings() {
+export default function OTThings(props) {
   return (
-    <section className="ot-section">
-      <h2>OT Things</h2>
-      <p>
-        As an occupational therapy enthusiast, I love exploring activities that improve
-        daily living skills, promote independence, and enhance quality of life.
-      </p>
-      <p>
-        From sensory activities to creative interventions, OT has a unique way of
-        blending science with empathy. Here you’ll find my favorite OT tips, tools, and
-        resources.
-      </p>
-      {/* Later: Add a curated list of OT resources */}
-    </section>
-  );
+    <>
+    <h1>OT Things!</h1>
+      <SectionEditor slug="ot-things" {...props} />
+    </>
+  )
 }
