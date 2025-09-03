@@ -1,142 +1,149 @@
 .mcm-modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     display: grid;
     place-items: center;
     z-index: 1000;
-    overflow-y: auto; /* allow modal to scroll if it grows tall */
+    overflow-y: auto;
+    /* allow modal to scroll if it grows tall */
     padding: 2rem 1rem;
-  }
-  
-  .mcm-modal {
+}
+
+.mcm-modal {
     width: min(780px, 92vw);
     border-radius: 16px;
     padding: 1rem 1rem 1.25rem;
     backdrop-filter: blur(12px);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
     color: #f2f2f7;
-    max-height: 90vh;         /* cap height */
-    overflow-y: auto;         /* scroll inside modal if needed */
-  }
-  
-  .mcm-modal-header {
+    max-height: 90vh;
+    /* cap height */
+    overflow-y: auto;
+    /* scroll inside modal if needed */
+}
+
+.mcm-modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.25rem 0.25rem 0.5rem;
-  }
-  
-  .mcm-icon-btn {
+}
+
+.mcm-icon-btn {
     background: transparent;
     border: none;
     color: inherit;
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
-  }
-  
-  .mcm-form {
+}
+
+.mcm-form {
     display: grid;
     gap: 0.85rem;
-  }
-  
-  .mcm-field {
+}
+
+.mcm-field {
     display: grid;
     gap: 0.35rem;
-  }
-  .mcm-field > span {
+}
+
+.mcm-field>span {
     font-size: 0.85rem;
     opacity: 0.9;
-  }
-  
-  .mcm-field input,
-  .mcm-field textarea {
+}
+
+.mcm-field input,
+.mcm-field textarea {
     width: 100%;
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     color: #fff;
     padding: 0.75rem 0.85rem;
     outline: none;
-  }
-  
-  .mcm-field input:focus,
-  .mcm-field textarea:focus {
-    border-color: rgba(168, 85, 247, 0.8); /* purple-ish focus */
+}
+
+.mcm-field input:focus,
+.mcm-field textarea:focus {
+    border-color: rgba(168, 85, 247, 0.8);
+    /* purple-ish focus */
     box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
-  }
-  
-  .mcm-row {
+}
+
+.mcm-row {
     display: flex;
     gap: 1rem;
     align-items: center;
-  }
-  
-  .mcm-checkbox {
+}
+
+.mcm-checkbox {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     user-select: none;
-  }
-  
-  .mcm-actions {
+}
+
+.mcm-actions {
     display: flex;
     gap: 0.6rem;
     justify-content: flex-end;
     margin-top: 0.25rem;
-  }
-  
-  .mcm-btn {
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.25);
+}
+
+.mcm-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     color: #fff;
     padding: 0.6rem 0.95rem;
     border-radius: 10px;
     cursor: pointer;
-  }
-  .mcm-btn.primary {
-    background: linear-gradient(135deg, rgba(168,85,247,0.9), rgba(99,102,241,0.9));
+}
+
+.mcm-btn.primary {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(99, 102, 241, 0.9));
     border: none;
-  }
-  .mcm-btn.ghost {
+}
+
+.mcm-btn.ghost {
     background: transparent;
-  }
-  
-  /* --- CKEditor overrides --- */
-  .ck.ck-toolbar {
+}
+
+/* --- CKEditor overrides --- */
+.ck.ck-toolbar {
     border-radius: 12px 12px 0 0;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.25);
-    color: #0e0e0e;
-  }
-  
-  .ck-editor__editable_inline {
-    min-height: 200px;        /* usable edit space */
-    max-height: 350px;        /* cap before scrolling */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+}
+
+.ck-editor__editable_inline {
+    min-height: 200px;
+    /* usable edit space */
+    max-height: 350px;
+    /* cap before scrolling */
     overflow-y: auto;
     border-radius: 0 0 12px 12px;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(250, 247, 247, 0.15);
     color: #fff;
     padding: 0.75rem 1rem;
-  }
-  
-  /* Ensure text inside editor is visible */
-  .ck-editor__editable_inline p,
-  .ck-editor__editable_inline li {
-    color: #fff;
-  }
-  
-  .ck-editor__editable_inline a {
-    color: #a855f7;
-  }
+}
 
-  .mcm-editor-wrap {
+/* Ensure text inside editor is visible */
+.ck-editor__editable_inline p,
+.ck-editor__editable_inline li {
+    color: #fff;
+}
+
+.ck-editor__editable_inline a {
+    color: #a855f7;
+}
+
+.mcm-editor-wrap {
     /* just a structural wrapper; styling handled by CKEditor overrides */
     display: block;
-  }
-
-  
+}

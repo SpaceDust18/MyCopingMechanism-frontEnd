@@ -1,9 +1,10 @@
-// src/SiteComponents/Sections/Posts.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../Forms/SearchBar";
 import { API_BASE_URL } from "../../api/config";
 import "./Posts.css";
+
+const EXCERPT_LEN = 250; 
 
 export default function Posts() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,10 +22,13 @@ export default function Posts() {
     return text.replace(/\s+/g, " ").trim();
   }
 
-  // Build a neat excerpt from content (HTML-safe)
-  function excerpt(content = "", len = 180) {
+  // Build a neat excerpt from content (HTML-safe), ending at a word boundary
+  function excerpt(content = "", len = EXCERPT_LEN) {
     const clean = htmlToText(content);
-    return clean.length > len ? clean.slice(0, len).trimEnd() + "…" : clean;
+    if (clean.length <= len) return clean;
+    const cut = clean.slice(0, len);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd() + "…";
   }
 
   // Fetch posts whenever page or search changes
@@ -74,9 +78,7 @@ export default function Posts() {
 
         {posts.map((post) => (
           <div key={post.id} className="post-card">
-            {post.image_url && (
-              <img src={post.image_url} alt={post.title} />
-            )}
+            {post.image_url && <img src={post.image_url} alt={post.title} />}
             <div className="post-content">
               <h2>{post.title}</h2>
               <p className="meta">
@@ -85,8 +87,9 @@ export default function Posts() {
                   ? new Date(post.created_at).toLocaleDateString()
                   : "—"}
               </p>
-              {/* Show a plain-text excerpt (HTML stripped) */}
-              <p>{excerpt(post.content)}</p>
+
+              <p className="excerpt">{excerpt(post.content, EXCERPT_LEN)}</p>
+
               <Link to={`/posts/${post.id}`} className="read-more">
                 Read More
               </Link>
