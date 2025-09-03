@@ -2,9 +2,10 @@ import Hero from "./Sections/Hero";
 import Blog from "./Sections/Blog.jsx";
 import Quote from "./Sections/Quote.jsx";
 import Hobbies from "./Sections/Hobbies.jsx";
-import About from "./Sections/About.jsx";
 import Nutrition from "./Sections/Nutrition.jsx";
 import OTThings from "./Sections/OTthings.jsx";
+import About from "./Sections/About.jsx";
+import Contact from "./Forms/Contact.jsx"
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Nutrition />
       <OTThings />
       <About />
+      <Contact />
     </>
   );
 }
