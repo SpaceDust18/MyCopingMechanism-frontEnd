@@ -15,8 +15,9 @@ export default function Profile({ authUser }) {
     <section className="profile-section">
       <h2>My Profile</h2>
       <div className="profile-card">
-        <p><strong>Name:</strong> {authUser.username || "User"}</p>
-        <p><strong>Email:</strong> {authUser.email}</p>
+        <p><strong>Username:</strong> {authUser?.username ?? "User"}</p>
+        <p><strong>Name:</strong> {authUser?.name || authUser?.username || "—"}</p>
+        <p><strong>Email:</strong> {authUser?.email || "—"}</p>
         <button className="edit-btn" onClick={handleEditClick}>Edit Profile</button>
       </div>
     </section>

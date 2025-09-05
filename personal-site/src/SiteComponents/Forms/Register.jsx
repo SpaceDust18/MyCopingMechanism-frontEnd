@@ -4,7 +4,8 @@ import { API_BASE_URL } from "../../api/config";
 import "./AuthForms.css";
 
 export default function Register() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");   // required
+  const [name, setName] = useState("");           // optional
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,16 +19,24 @@ export default function Register() {
     if (password !== confirmPassword) {
       return setError("Passwords do not match!");
     }
+
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: name, email, password }),
+        body: JSON.stringify({
+          username,           // required
+          name: name || null, // optional
+          email,
+          password
+        }),
       });
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Registration failed");
       }
+
       alert("Registration successful! Please log in.");
       navigate("/login");
     } catch (err) {
@@ -40,13 +49,22 @@ export default function Register() {
       <h2>Register</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <label>Name:</label>
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <label>Name (optional):</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required
+          placeholder="Full name"
         />
+
         <label>Email:</label>
         <input
           type="email"
@@ -54,6 +72,7 @@ export default function Register() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <label>Password:</label>
         <input
           type="password"
@@ -61,6 +80,7 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
         <label>Confirm Password:</label>
         <input
           type="password"
@@ -68,8 +88,11 @@ export default function Register() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
+
         <button type="submit" className="submit-btn">Register</button>
-        <p>Already have an account? <Link to="/login">Login</Link></p>
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </form>
     </section>
   );
