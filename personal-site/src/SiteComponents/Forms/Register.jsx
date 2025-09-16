@@ -62,7 +62,6 @@ export default function Register() {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Full name"
         />
 
         <label>Email:</label>
