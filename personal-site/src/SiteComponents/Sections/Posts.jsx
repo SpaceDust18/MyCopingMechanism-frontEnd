@@ -43,7 +43,7 @@ export default function Posts() {
           limit: "10",
           ...(searchQuery.trim() ? { search: searchQuery.trim() } : {}),
         });
-        const res = await fetch(`${API_BASE_URL}/posts?${params.toString()}`);
+        const res = await fetch(`${API_BASE_URL}/api/posts?${params.toString()}`);
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || `Failed ${res.status}`);

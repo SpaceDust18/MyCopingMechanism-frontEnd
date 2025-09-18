@@ -1,15 +1,39 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../api/config";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import { API_BASE_URL } from "../../api/config.js";
 import "./AuthForms.css";
 
-export default function Login({ setAuthUser }) {
+export default function Login({ setAuthUser, setToken, authUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // If app already knows the user, bounce right away
+  if (authUser) {
+    return <Navigate to="/profile" replace />;
+  }
+
+  // One-time hydration: if both token & user are in storage, lift them to app state, then go to profile.
+  useEffect(() => {
+    const t = localStorage.getItem("token") || localStorage.getItem("authToken");
+    const u = localStorage.getItem("user");
+    if (t && u) {
+      try {
+        const parsed = JSON.parse(u);
+        setToken?.(t);
+        setAuthUser?.(parsed);
+        navigate("/profile", { replace: true });
+      } catch {
+        // bad JSON, clear it
+        localStorage.removeItem("user");
+      }
+    }
+    // run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,25 +50,21 @@ export default function Login({ setAuthUser }) {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Login failed");
 
-      if (!res.ok) {
-        throw new Error(data?.error || "Login failed");
-      }
-
-      // Persist token and (optionally) user
+      // Persist token & user (store under both keys for compatibility)
       localStorage.setItem("token", data.token);
-      // You can store minimal user in localStorage too if you like:
-      // localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Lift user to app state so UI updates immediately
-      if (typeof setAuthUser === "function") {
-        setAuthUser(data.user);
-      }
+      // Lift to app state so UI updates immediately
+      setToken?.(data.token);
+      setAuthUser?.(data.user);
 
-      navigate("/profile");
+      navigate("/profile", { replace: true });
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }

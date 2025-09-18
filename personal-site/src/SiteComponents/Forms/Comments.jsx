@@ -1,72 +1,104 @@
+// src/SiteComponents/Forms/Comments.jsx
 import React, { useState } from "react";
 import { API_BASE_URL } from "../../api/config";
 import "./Comments.css";
 
 export default function Comments({ postId, authUser, token, comments, setComments }) {
-  const [newComment, setNewComment] = useState("");
-  const [error, setError] = useState("");
+  const [content, setContent] = useState("");
+  const [err, setErr] = useState("");
 
-  const handleSubmit = async (e) => {
+  const isLoggedIn = !!token;
+
+  async function add(e) {
     e.preventDefault();
-    setError("");
-
-    if (!newComment.trim()) return;
-
+    setErr("");
     try {
-      const res = await fetch(`${API_BASE_URL}/comments/post/${postId}`, {
+      if (!isLoggedIn) throw new Error("You must be logged in to comment.");
+
+      const res = await fetch(`${API_BASE_URL}/api/comments/post/${postId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          content: newComment,
-        }),
+        body: JSON.stringify({ content: content.trim() }),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to post comment");
-      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Failed ${res.status}`);
 
-      const savedComment = await res.json();
-
-      // Optimistically update UI
-      setComments((prev) => [...prev, savedComment]);
-      setNewComment("");
-    } catch (err) {
-      setError(err.message);
+      setComments(prev => [...prev, data]);
+      setContent("");
+    } catch (e) {
+      setErr(e.message);
     }
-  };
+  }
+
+  async function removeComment(id) {
+    if (!window.confirm("Delete this comment?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/comments/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Failed ${res.status}`);
+
+      setComments(prev => prev.filter(c => c.id !== id));
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  function canDelete(c) {
+    if (!authUser) return false;
+    // author may delete; admin may delete if backend change (step 1) is applied
+    return authUser.id === c.user_id || authUser.role === "admin";
+  }
 
   return (
-    <section className="comments-section">
+    <section style={{ marginTop: "2rem" }}>
       <h3>Comments</h3>
+      {err && <p className="error">{err}</p>}
 
-      {comments?.length === 0 && <p>No comments yet. Be the first to comment!</p>}
-
-      <ul className="comments-list">
-        {comments.map((c) => (
-          <li key={c.id}>
-            <strong>{c.author || "Anonymous"}:</strong> {c.content}
-          </li>
+      <div style={{ display: "grid", gap: ".75rem", marginBottom: "1rem" }}>
+        {comments.length === 0 && <p>No comments yet.</p>}
+        {comments.map(c => (
+          <div key={c.id} style={{ background: "rgba(255,255,255,.05)", padding: ".75rem", borderRadius: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+              <strong>{c.author ?? "Anonymous"}</strong>
+              <span style={{ opacity: .7, fontSize: ".85rem" }}>
+                {c.created_at ? new Date(c.created_at).toLocaleString() : ""}
+              </span>
+              {canDelete(c) && (
+                <button
+                  onClick={() => removeComment(c.id)}
+                  style={{ marginLeft: "auto" }}
+                  className="mcm-btn ghost"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+            <p style={{ margin: ".5rem 0 0" }}>{c.content}</p>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      {authUser ? (
-        <form onSubmit={handleSubmit} className="comment-form">
-          {error && <p className="error">{error}</p>}
+      {isLoggedIn ? (
+        <form onSubmit={add} style={{ display: "grid", gap: ".5rem" }}>
           <textarea
-            rows="3"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write your comment..."
+            rows={3}
+            value={content}
+            onChange={e => setContent(e.target.value)}
+            placeholder="Write a comment…"
             required
-          ></textarea>
-          <button type="submit">Post Comment</button>
+          />
+          <button type="submit" className="mcm-btn primary">Add Comment</button>
         </form>
       ) : (
-        <p className="login-to-comment">Log in to post a comment.</p>
+        <p style={{ opacity: .8 }}>Log in to add a comment.</p>
       )}
     </section>
   );

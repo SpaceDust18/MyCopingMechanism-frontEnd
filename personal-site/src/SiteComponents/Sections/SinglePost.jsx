@@ -31,7 +31,7 @@ export default function SinglePost({ authUser, token }) {
       setLoading(true);
       setErr("");
       try {
-        const res = await fetch(`${API_BASE_URL}/posts/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || `Failed ${res.status}`);
@@ -58,7 +58,7 @@ export default function SinglePost({ authUser, token }) {
     let alive = true;
     (async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/comments/post/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/comments/post/${id}`);
         if (!res.ok) return; // quietly ignore for now
         const data = await res.json();
         if (alive) setComments(Array.isArray(data) ? data : []);
@@ -74,7 +74,7 @@ export default function SinglePost({ authUser, token }) {
   async function saveEdit() {
     try {
       const cleanHtml = DOMPurify.sanitize(draftContent || "");
-      const res = await fetch(`${API_BASE_URL}/posts/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function SinglePost({ authUser, token }) {
     if (!ok) return;
 
     try {
-      const res = await fetch(`${API_BASE_URL}/posts/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
