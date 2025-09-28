@@ -1,0 +1,155 @@
+/* src/pages/Reflections.css */
+
+.reflections-page {
+    --bg: rgba(255, 255, 255, 0.06);
+    --bg-alt: rgba(120, 120, 255, 0.10);
+    --border: rgba(255, 255, 255, 0.18);
+    --text: #121212;
+    --text-muted: #646b73;
+    --radius: 14px;
+  
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .reflections-page { --text: #f7f7f8; --text-muted: #b5bdc6; }
+  }
+  
+  .reflections-title,
+  .reflections-prompt {
+    font-family: "Orbitron", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--text);
+    margin: 0 0 .75rem;
+  }
+  
+  .reflections-prompt {
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-size: .95rem;
+  }
+  
+  /* Messages list */
+  .reflections-messages {
+    display: grid;
+    gap: .5rem;
+    max-height: 60vh;
+    overflow: auto;
+    padding: .25rem;
+    scroll-behavior: smooth;
+  }
+  
+  /* Individual message */
+  .reflection-message {
+    display: grid;
+    gap: .4rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .6rem .8rem;
+  }
+  
+  .reflection-message.mine {
+    background: var(--bg-alt);
+    border-color: rgba(120, 120, 255, 0.35);
+  }
+  
+  /* Editing state */
+  .reflection-message textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 60px;
+    font: inherit;
+    color: var(--text);
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    padding: .55rem .7rem;
+    outline: none;
+  }
+  
+  .reflection-message textarea:focus {
+    box-shadow: 0 0 0 3px rgba(120, 120, 255, 0.25);
+    border-color: rgba(120, 120, 255, 0.6);
+  }
+  
+  /* Actions row */
+  .message-actions {
+    display: flex;
+    gap: .5rem;
+    margin-top: .25rem;
+  }
+  
+  .message-actions button {
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.15);
+    color: var(--text);
+    padding: .45rem .8rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .18s ease;
+    font-size: .9rem;
+  }
+  
+  .message-actions button:hover { transform: translateY(-1px); }
+  
+  /* Composer */
+  .composer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: .6rem;
+    margin-top: .9rem;
+    align-items: start;
+    opacity: 1;
+  }
+  
+  .composer.disabled {
+    opacity: .6;
+    pointer-events: none;
+  }
+  
+  .composer textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 56px;
+    font: inherit;
+    color: var(--text);
+    background: transparent;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: .65rem .8rem;
+    outline: none;
+  }
+  
+  .composer textarea:focus {
+    box-shadow: 0 0 0 3px rgba(168,85,247,.25);
+    border-color: rgba(168,85,247,.6);
+  }
+  
+  .composer button {
+    height: 56px;
+    align-self: stretch;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(168,85,247,.9), rgba(99,102,241,.9));
+    color: #fff;
+    cursor: pointer;
+    padding: 0 1rem;
+    font-weight: 600;
+    transition: transform .18s ease, filter .18s ease;
+  }
+  
+  .composer button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+  
+  /* Small screens */
+  @media (max-width: 560px) {
+    .reflections-page { padding: 1.25rem .75rem; }
+    .composer { grid-template-columns: 1fr; }
+    .composer button { height: 44px; }
+  }

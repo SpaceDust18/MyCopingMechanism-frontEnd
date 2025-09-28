@@ -1,27 +1,23 @@
 // src/pages/ReflectionsPage.jsx
 import { useEffect, useRef, useState } from "react";
 import { useSocket } from "../../hooks/useSocket.js";
+import "./Reflections.css";
 
 export default function ReflectionsPage({ authUser }) {
-  // Passes the latest token so the hook can (re)connect with auth
   const token =
     localStorage.getItem("token") || localStorage.getItem("authToken") || null;
   const socket = useSocket(token);
-
   const API = import.meta.env.VITE_API_BASE_URL || "";
 
   const [daily, setDaily] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
-
   const listEndRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
-
     (async () => {
       try {
         const d = await fetch(`${API}/api/reflections/today`).then((r) => r.json());
@@ -37,18 +33,10 @@ export default function ReflectionsPage({ authUser }) {
           setMessages([]);
         }
       }
-
-      if (socket) {
-        socket.emit("reflections:joinToday", {}, () => {});
-      }
+      if (socket) socket.emit("reflections:joinToday", {}, () => {});
     })();
 
-    const onNew = (msg) => {
-      if (msg && typeof msg === "object") {
-        setMessages((prev) => [...prev, msg]);
-      }
-    };
-
+    const onNew = (msg) => msg && setMessages((prev) => [...prev, msg]);
     const onUpdated = (msg) => {
       if (!msg?.id) return;
       setMessages((prev) =>
@@ -59,7 +47,6 @@ export default function ReflectionsPage({ authUser }) {
         setEditText("");
       }
     };
-
     const onDeleted = ({ id }) => {
       if (!id) return;
       setMessages((prev) => prev.filter((m) => m.id !== id));
@@ -88,7 +75,6 @@ export default function ReflectionsPage({ authUser }) {
     listEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
-  // Send new message — requires login (server enforces; UI gated too)
   const send = () => {
     const content = input.trim();
     if (!content || !socket || !authUser) return;
@@ -97,22 +83,14 @@ export default function ReflectionsPage({ authUser }) {
     });
   };
 
-  // Ownership check
   const isMine = (m) => {
     if (!authUser) return false;
-
-    // Prefer strong check by user_id (coerce to numbers to avoid "1" !== 1)
     if (m.user_id != null && authUser.id != null) {
-      const a = Number(m.user_id);
-      const b = Number(authUser.id);
-      if (!Number.isNaN(a) && !Number.isNaN(b)) return a === b;
+      return Number(m.user_id) === Number(authUser.id);
     }
-
-    // Legacy fallback only when user_id is null
     if (m.user_id == null && m.username && authUser.username) {
       return m.username.toLowerCase() === authUser.username.toLowerCase();
     }
-
     return false;
   };
 
@@ -120,19 +98,15 @@ export default function ReflectionsPage({ authUser }) {
     setEditingId(m.id);
     setEditText(m.content || "");
   };
-
   const cancelEdit = () => {
     setEditingId(null);
     setEditText("");
   };
-
   const saveEdit = async (id) => {
     const content = editText.trim();
     if (!content || !socket) return;
-
     const prev = messages;
     setMessages((curr) => curr.map((m) => (m.id === id ? { ...m, content } : m)));
-
     let socketOk = false;
     await new Promise((resolve) => {
       try {
@@ -144,7 +118,6 @@ export default function ReflectionsPage({ authUser }) {
         resolve();
       }
     });
-
     if (!socketOk) {
       try {
         const jwt = token;
@@ -162,16 +135,13 @@ export default function ReflectionsPage({ authUser }) {
         return;
       }
     }
-
     setEditingId(null);
     setEditText("");
   };
-
   const removeMsg = async (id) => {
     if (!id || !socket) return;
     const prev = messages;
     setMessages((curr) => curr.filter((m) => m.id !== id));
-
     let socketOk = false;
     await new Promise((resolve) => {
       try {
@@ -183,7 +153,6 @@ export default function ReflectionsPage({ authUser }) {
         resolve();
       }
     });
-
     if (!socketOk) {
       try {
         const jwt = token;
@@ -201,33 +170,18 @@ export default function ReflectionsPage({ authUser }) {
   const canPost = !!authUser;
 
   return (
-    <main>
-      <h1>Reflections</h1>
+    <main className="reflections-page">
+      <h1 className="reflections-title">Reflections</h1>
+      <h2 className="reflections-prompt">{daily?.prompt?.text ?? "Loading..."}</h2>
 
-      <h2>{daily?.prompt?.text ?? "Loading..."}</h2>
-
-      <div
-        style={{
-          display: "grid",
-          gap: ".5rem",
-          maxHeight: "60vh",
-          overflow: "auto",
-          paddingBlock: ".5rem",
-        }}
-      >
+      <div className="reflections-messages">
         {messages.map((m) => {
           const mine = isMine(m);
           const isEditing = editingId === m.id;
           return (
             <div
               key={m.id ?? `${m.username}-${Math.random()}`}
-              style={{
-                display: "grid",
-                gap: ".35rem",
-                padding: ".5rem .75rem",
-                borderRadius: 8,
-                background: mine ? "rgba(120,120,255,.08)" : "rgba(255,255,255,.04)",
-              }}
+              className={`reflection-message ${mine ? "mine" : ""}`}
             >
               {!isEditing ? (
                 <>
@@ -235,15 +189,11 @@ export default function ReflectionsPage({ authUser }) {
                     <strong>{m.username ?? "Anonymous"}</strong>: {m.content}
                   </div>
                   {mine && (
-                    <div style={{ display: "flex", gap: ".5rem" }}>
+                    <div className="message-actions">
                       <button type="button" onClick={() => startEdit(m)}>
                         Edit
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => removeMsg(m.id)}
-                        style={{ opacity: 0.85 }}
-                      >
+                      <button type="button" onClick={() => removeMsg(m.id)}>
                         Delete
                       </button>
                     </div>
@@ -254,16 +204,9 @@ export default function ReflectionsPage({ authUser }) {
                   <textarea
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        saveEdit(m.id);
-                      }
-                    }}
                     rows={2}
-                    style={{ width: "100%", resize: "vertical" }}
                   />
-                  <div style={{ display: "flex", gap: ".5rem" }}>
+                  <div className="message-actions">
                     <button type="button" onClick={() => saveEdit(m.id)}>
                       Save
                     </button>
@@ -279,29 +222,15 @@ export default function ReflectionsPage({ authUser }) {
         <div ref={listEndRef} />
       </div>
 
-      {/* Composer - disabled if not logged in */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          gap: ".5rem",
-          marginTop: ".75rem",
-          opacity: canPost ? 1 : 0.6,
-        }}
+        className={`composer ${!canPost ? "disabled" : ""}`}
         title={canPost ? "" : "Log in to post a reflection"}
       >
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              if (canPost) send();
-            }
-          }}
           placeholder={canPost ? "Share a quick thought…" : "Log in to share a thought…"}
           rows={2}
-          style={{ width: "100%", resize: "vertical" }}
           disabled={!canPost}
         />
         <button onClick={send} disabled={!socket || !canPost}>
