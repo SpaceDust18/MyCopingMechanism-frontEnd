@@ -1,34 +1,38 @@
+/* src/SiteComponents/Sections/Hero.css */
 .hero {
-    background-image: url('/pexels-prateek-katyal-2740956.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    color: white;
-    text-align: center;
-  }
-  
-  .hero-overlay {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 2rem 3rem;
-    border-radius: 10px;
-    animation: fadeIn 1.5s ease-in-out;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  background-image: url('/pexels-prateek-katyal-2740956.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;      /* full viewport so Hero is always first visible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+  text-align: center;
+  scroll-margin-top: 60px; /* ensures scrolling anchors account for fixed navbar */
+}
 
-section.hero {
-    margin-top: 60px; /* offset for fixed navbar */
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  animation: fadeIn 1.5s ease-in-out;
+  max-width: 800px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* if your navbar is fixed, add margin only on anchor scrolls, not initial load */
+section.hero {
+  margin-top: 0;
+}

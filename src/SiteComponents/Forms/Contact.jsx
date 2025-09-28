@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { API_BASE_URL } from "../../api/config";
 import "./Contact.css";
 
-export default function Contact() {
+export default function Contact({ suppressAutoFocus = true }) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,11 +36,9 @@ export default function Contact() {
         throw new Error(data.error || "Failed to send message.");
       }
 
-      // success
       setSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
 
-      // Auto-hide success after 3 sec
       setTimeout(() => setSubmitted(false), 3000);
     } catch (err) {
       setError(err.message);
@@ -50,7 +48,11 @@ export default function Contact() {
   };
 
   return (
-    <section className="contact-section">
+    <section
+      className="contact-section"
+      tabIndex={suppressAutoFocus ? -1 : undefined}
+      aria-live="polite"
+    >
       <h2>Contact Us</h2>
 
       {submitted && (

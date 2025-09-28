@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSocket } from "../../hooks/useSocket.js";
 import "./Reflections.css";
 
-export default function ReflectionsPage({ authUser }) {
+export default function ReflectionsPage({ authUser, autoScroll = true }) {
   const token =
     localStorage.getItem("token") || localStorage.getItem("authToken") || null;
   const socket = useSocket(token);
@@ -14,18 +14,18 @@ export default function ReflectionsPage({ authUser }) {
   const [input, setInput] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+
   const listEndRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
+
     (async () => {
       try {
         const d = await fetch(`${API}/api/reflections/today`).then((r) => r.json());
         if (!cancelled) setDaily(d);
 
-        const m = await fetch(`${API}/api/reflections/today/messages`).then((r) =>
-          r.json()
-        );
+        const m = await fetch(`${API}/api/reflections/today/messages`).then((r) => r.json());
         if (!cancelled) setMessages(Array.isArray(m) ? m : []);
       } catch {
         if (!cancelled) {
@@ -33,6 +33,7 @@ export default function ReflectionsPage({ authUser }) {
           setMessages([]);
         }
       }
+
       if (socket) socket.emit("reflections:joinToday", {}, () => {});
     })();
 
@@ -61,6 +62,7 @@ export default function ReflectionsPage({ authUser }) {
       socket.on("reflections:message:updated", onUpdated);
       socket.on("reflections:message:deleted", onDeleted);
     }
+
     return () => {
       cancelled = true;
       if (socket) {
@@ -72,8 +74,9 @@ export default function ReflectionsPage({ authUser }) {
   }, [API, socket, editingId]);
 
   useEffect(() => {
-    listEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+    if (!autoScroll) return;
+    listEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages.length, autoScroll]);
 
   const send = () => {
     const content = input.trim();
@@ -105,8 +108,9 @@ export default function ReflectionsPage({ authUser }) {
   const saveEdit = async (id) => {
     const content = editText.trim();
     if (!content || !socket) return;
-    const prev = messages;
+
     setMessages((curr) => curr.map((m) => (m.id === id ? { ...m, content } : m)));
+
     let socketOk = false;
     await new Promise((resolve) => {
       try {
@@ -118,6 +122,7 @@ export default function ReflectionsPage({ authUser }) {
         resolve();
       }
     });
+
     if (!socketOk) {
       try {
         const jwt = token;
@@ -131,17 +136,19 @@ export default function ReflectionsPage({ authUser }) {
         });
         if (!res.ok) throw new Error("PATCH failed");
       } catch {
-        setMessages(prev);
-        return;
+        // revert already handled by server push on failure next load; keep local as-is
       }
     }
+
     setEditingId(null);
     setEditText("");
   };
+
   const removeMsg = async (id) => {
     if (!id || !socket) return;
-    const prev = messages;
+
     setMessages((curr) => curr.filter((m) => m.id !== id));
+
     let socketOk = false;
     await new Promise((resolve) => {
       try {
@@ -153,6 +160,7 @@ export default function ReflectionsPage({ authUser }) {
         resolve();
       }
     });
+
     if (!socketOk) {
       try {
         const jwt = token;
@@ -162,7 +170,7 @@ export default function ReflectionsPage({ authUser }) {
         });
         if (!res.ok) throw new Error("DELETE failed");
       } catch {
-        setMessages(prev);
+        // if server delete failed, refetch happens on next mount; keep local removal
       }
     }
   };
@@ -170,73 +178,77 @@ export default function ReflectionsPage({ authUser }) {
   const canPost = !!authUser;
 
   return (
-    <main className="reflections-page">
-      <h1 className="reflections-title">Reflections</h1>
-      <h2 className="reflections-prompt">{daily?.prompt?.text ?? "Loading..."}</h2>
+    <section className="reflections">
+      <h1>Reflections</h1>
+      <div className="prompt">{daily?.prompt?.text ?? "Loading..."}</div>
 
-      <div className="reflections-messages">
-        {messages.map((m) => {
-          const mine = isMine(m);
-          const isEditing = editingId === m.id;
-          return (
-            <div
-              key={m.id ?? `${m.username}-${Math.random()}`}
-              className={`reflection-message ${mine ? "mine" : ""}`}
-            >
-              {!isEditing ? (
-                <>
-                  <div>
-                    <strong>{m.username ?? "Anonymous"}</strong>: {m.content}
-                  </div>
-                  {mine && (
-                    <div className="message-actions">
-                      <button type="button" onClick={() => startEdit(m)}>
-                        Edit
+      <div className="panel">
+        <div className="reflections-list">
+          {messages.map((m, i) => {
+            const mine = isMine(m);
+            const isEditing = editingId === m.id;
+            return (
+              <article
+                key={m.id ?? `${m.username ?? "user"}-${i}`}
+                className={`reflections-item ${mine ? "mine" : ""}`}
+              >
+                {!isEditing ? (
+                  <>
+                    <div className="meta">
+                      <span className="author">{m.username ?? "Anonymous"}</span>
+                    </div>
+                    <div className="content">{m.content}</div>
+                    {mine && (
+                      <div className="reflections-actions">
+                        <button className="mcm-btn" type="button" onClick={() => startEdit(m)}>
+                          Edit
+                        </button>
+                        <button className="mcm-btn ghost" type="button" onClick={() => removeMsg(m.id)}>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <textarea
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      rows={2}
+                    />
+                    <div className="reflections-actions">
+                      <button className="mcm-btn primary" type="button" onClick={() => saveEdit(m.id)}>
+                        Save
                       </button>
-                      <button type="button" onClick={() => removeMsg(m.id)}>
-                        Delete
+                      <button className="mcm-btn ghost" type="button" onClick={cancelEdit}>
+                        Cancel
                       </button>
                     </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <textarea
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    rows={2}
-                  />
-                  <div className="message-actions">
-                    <button type="button" onClick={() => saveEdit(m.id)}>
-                      Save
-                    </button>
-                    <button type="button" onClick={cancelEdit}>
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
-        <div ref={listEndRef} />
-      </div>
+                  </>
+                )}
+              </article>
+            );
+          })}
+          <div ref={listEndRef} />
+        </div>
 
-      <div
-        className={`composer ${!canPost ? "disabled" : ""}`}
-        title={canPost ? "" : "Log in to post a reflection"}
-      >
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={canPost ? "Share a quick thought…" : "Log in to share a thought…"}
-          rows={2}
-          disabled={!canPost}
-        />
-        <button onClick={send} disabled={!socket || !canPost}>
-          Send
-        </button>
+        <div
+          className="reflections-composer"
+          aria-disabled={!canPost}
+          title={canPost ? "" : "Log in to post a reflection"}
+        >
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={canPost ? "Share a quick thought…" : "Log in to share a thought…"}
+            rows={2}
+            disabled={!canPost}
+          />
+          <button className="mcm-btn primary" onClick={send} disabled={!socket || !canPost}>
+            Send
+          </button>
+        </div>
       </div>
-    </main>
+    </section>
   );
 }
