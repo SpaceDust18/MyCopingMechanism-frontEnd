@@ -80,16 +80,6 @@ src/
 
 ---
 
-## 📸 Screenshots
-
-_Example UI (add screenshots here):_
-- Login / Register  
-- Daily Reflections  
-- Blog / Posts  
-- Profile Page  
-
----
-
 ## 🧪 Testing
 
 - Manual testing with local backend (`npm run dev`).  
