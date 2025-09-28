@@ -28,6 +28,7 @@ export default function NavBar({ authUser, setAuthUser, setToken }) {
         <Link to="/otthings" onClick={() => setIsOpen(false)}>OT Things</Link>
         <Link to="/privacy" onClick={() => setIsOpen(false)}>Privacy</Link>
         <Link to="/quote" onClick={() => setIsOpen(false)}>Quote</Link>
+        <Link to="/reflections" onClick={() => setIsOpen(false)}>Reflections</Link>
         <Link to="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
 
         {/* Admin-only link */}

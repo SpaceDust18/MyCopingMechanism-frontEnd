@@ -11,12 +11,10 @@ export default function Login({ setAuthUser, setToken, authUser }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // If app already knows the user, bounce right away
   if (authUser) {
     return <Navigate to="/profile" replace />;
   }
 
-  // One-time hydration: if both token & user are in storage, lift them to app state, then go to profile.
   useEffect(() => {
     const t = localStorage.getItem("token") || localStorage.getItem("authToken");
     const u = localStorage.getItem("user");
@@ -27,11 +25,9 @@ export default function Login({ setAuthUser, setToken, authUser }) {
         setAuthUser?.(parsed);
         navigate("/profile", { replace: true });
       } catch {
-        // bad JSON, clear it
         localStorage.removeItem("user");
       }
     }
-    // run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,12 +49,11 @@ export default function Login({ setAuthUser, setToken, authUser }) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || "Login failed");
 
-      // Persist token & user (store under both keys for compatibility)
+      // Persist token & user
       localStorage.setItem("token", data.token);
       localStorage.setItem("authToken", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Lift to app state so UI updates immediately
       setToken?.(data.token);
       setAuthUser?.(data.user);
 

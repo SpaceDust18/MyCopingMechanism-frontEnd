@@ -21,6 +21,7 @@ import Nutrition from "./SiteComponents/Sections/Nutrition";
 import OTthings from "./SiteComponents/Sections/OTthings";
 import Privacy from "./SiteComponents/Sections/Privacy";
 import Quote from "./SiteComponents/Sections/Quote";
+import Reflections from "./SiteComponents/Sections/Reflections.jsx";
 import Home from "./SiteComponents/Home";
 import Footer from "./SiteComponents/Sections/Footer.jsx";
 
@@ -92,6 +93,7 @@ export default function App() {
         {/* Misc */}
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/quote" element={<Quote />} />
+        <Route path="/reflections" element={<Reflections authUser={authUser} token={token} />} />
         <Route path="/contact" element={<Contact />} />
 
         {/* Standalone comments page (optional) */}
