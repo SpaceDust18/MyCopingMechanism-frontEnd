@@ -23,7 +23,7 @@ export default function NavBar({ authUser, setAuthUser, setToken }) {
         <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
         <Link to="/about" onClick={() => setIsOpen(false)}>About</Link>
         <Link to="/posts" onClick={() => setIsOpen(false)}>Posts</Link>       
-        <Link to="/hobbies" onClick={() => setIsOpen(false)}>Hobbies</Link>
+        <Link to="/mind-body" onClick={() => setIsOpen(false)}>Mind & Body</Link>
         <Link to="/nutrition" onClick={() => setIsOpen(false)}>Nutrition</Link>
         <Link to="/otthings" onClick={() => setIsOpen(false)}>OT Things</Link>
         <Link to="/privacy" onClick={() => setIsOpen(false)}>Privacy</Link>

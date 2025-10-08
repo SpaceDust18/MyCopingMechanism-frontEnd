@@ -14,7 +14,7 @@ import Blog from "./SiteComponents/Sections/Blog";
 import NewPost from "./SiteComponents/Forms/NewPost.jsx";
 import Posts from "./SiteComponents/Sections/Posts.jsx";
 import SinglePost from "./SiteComponents/Sections/SinglePost.jsx";
-import Hobbies from "./SiteComponents/Sections/Hobbies";
+import MindBody from "./SiteComponents/Sections/MindBody.jsx";
 import NavBar from "./SiteComponents/Sections/NavBar";
 import NotFound from "./SiteComponents/Sections/NotFound.jsx";
 import Nutrition from "./SiteComponents/Sections/Nutrition";
@@ -86,7 +86,7 @@ export default function App() {
 
         {/* CMS Sections using SectionEditor under the hood */}
         <Route path="/about" element={<About authUser={authUser} token={token} />} />
-        <Route path="/hobbies" element={<Hobbies authUser={authUser} token={token} />} />
+        <Route path="/mind-body" element={<MindBody authUser={authUser} token={token} />} />
         <Route path="/nutrition" element={<Nutrition authUser={authUser} token={token} />} />
         <Route path="/otthings" element={<OTthings authUser={authUser} token={token} />} />
 

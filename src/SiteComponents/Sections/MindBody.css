@@ -1,4 +1,5 @@
-.hobbies-section {
+/* src/SiteComponents/Sections/MindBody.css */
+.mindbody-section {
   padding: 2rem;
   text-align: center;
   background: #fff;
@@ -8,8 +9,8 @@
   color: black;
 }
 
-/* Make Hobbies cards solid, no blur */
-.hobbies-section .cms-card {
+/* Make Mind & Body cards solid, no blur */
+.mindbody-section .cms-card {
   backdrop-filter: none !important;
   background: #fff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
@@ -17,15 +18,17 @@
 }
 
 /* Ensure text colors are dark on the solid card */
-.hobbies-section .cms-card h3 { color: #111 !important; }
-.hobbies-section .cms-card p  { color: #222 !important; }
+.mindbody-section .cms-card h3 { color: #111 !important; }
+.mindbody-section .cms-card p  { color: #222 !important; }
 
-.hobbies-section h2 {
-  font-size: 2rem;
+.mindbody-section h1 {
+  font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.hobbies-section p {
-  font-size: 1.2rem;
-  color: #555;
+.mindbody-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  color: #444;
 }

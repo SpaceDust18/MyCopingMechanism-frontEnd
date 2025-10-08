@@ -2,7 +2,7 @@
 import { useLayoutEffect } from "react";
 import Hero from "./Sections/Hero";
 import Blog from "./Sections/Blog.jsx";
-import Hobbies from "./Sections/Hobbies.jsx";
+import MindBody from "./Sections/MindBody.jsx";
 import Nutrition from "./Sections/Nutrition.jsx";
 import OTThings from "./Sections/OTthings.jsx";
 import Quote from "./Sections/Quote.jsx";
@@ -19,7 +19,7 @@ export default function Home() {
     <>
       <Hero />
       <Blog />
-      <Hobbies />
+      <MindBody />
       <Nutrition />
       <OTThings />
       <Quote />
