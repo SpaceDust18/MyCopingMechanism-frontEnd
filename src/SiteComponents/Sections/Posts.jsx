@@ -4,7 +4,7 @@ import SearchBar from "../Forms/SearchBar";
 import { API_BASE_URL } from "../../api/config";
 import "./Posts.css";
 
-const EXCERPT_LEN = 250; 
+const EXCERPT_LEN = 250;
 
 export default function Posts() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,7 +88,8 @@ export default function Posts() {
                   : "—"}
               </p>
 
-              <p className="excerpt">{excerpt(post.content, EXCERPT_LEN)}</p>
+              {/* ✨ NEW: display clean text excerpt of post content */}
+              <p className="excerpt">{excerpt(post.content)}</p>
 
               <Link to={`/posts/${post.id}`} className="read-more">
                 Read More
