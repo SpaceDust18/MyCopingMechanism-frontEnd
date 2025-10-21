@@ -10,6 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPw, setShowPw] = useState(false);   // ✅ this is now defined properly
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,10 +26,10 @@ export default function Register() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username,           // required
-          name: name || null, // optional
+          username,
+          name: name || null,
           email,
-          password
+          password,
         }),
       });
 
@@ -72,23 +73,37 @@ export default function Register() {
           required
         />
 
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="password-section">
+          <label>Password:</label>
+          <input
+            type={showPw ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+          <label>Confirm Password:</label>
+          <input
+            type={showPw ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit" className="submit-btn">Register</button>
+          <button
+            type="button"
+            className="toggle-password"
+            onClick={() => setShowPw((v) => !v)}
+            aria-label={showPw ? "Hide passwords" : "Show passwords"}
+          >
+            {showPw ? "Hide Passwords" : "Show Passwords"}
+          </button>
+        </div>
+
+        <button type="submit" className="submit-btn">
+          Register
+        </button>
+
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>
